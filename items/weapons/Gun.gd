@@ -2,7 +2,7 @@ extends Node2D
 class_name Gun
 
 
-signal gun_fired(new_ammo_count)
+signal gun_ammo_changed(new_ammo_count)
 signal gun_out_of_ammo
 
 
@@ -25,20 +25,25 @@ func _ready():
 func attack():
 	if $ShotCooldown.is_stopped() and current_ammo > 0:
 		$ShotCooldown.start()
-		print("Gun.attack")
 		var bullet_direction = gun_direction.global_position - end_of_gun.global_position
 		var bullet: Bullet = Bullet.instance()
 		bullet.initialize(end_of_gun.global_position, bullet_direction.normalized())
 		get_node("/root/main").add_child(bullet)
 		$AnimationPlayer.play("muzzle_flash")
 		set_current_ammo(current_ammo - 1)
-		emit_signal("gun_fired", current_ammo)
+		emit_signal("gun_ammo_changed", current_ammo)
 		if current_ammo <= 0:
 			emit_signal("gun_out_of_ammo")
 
 
 func start_reload():
-	pass
+	$AnimationPlayer.play("reload")
+
+
+# Called at the end of the reload animation
+func _stop_reload():
+	current_ammo = max_ammo
+	emit_signal("gun_ammo_changed", current_ammo)
 
 
 func set_current_ammo(ammo: int):

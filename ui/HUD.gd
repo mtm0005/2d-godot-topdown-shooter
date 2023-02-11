@@ -18,7 +18,7 @@ func set_player(player: Player):
 	set_current_ammo(player.weapon.max_ammo)
 
 	player.connect("player_health_changed", self, "set_health_value")
-	player.weapon.connect("gun_fired", self, "set_current_ammo")
+	player.weapon.connect("gun_ammo_changed", self, "set_current_ammo")
 
 
 func set_health_value(health: int):
