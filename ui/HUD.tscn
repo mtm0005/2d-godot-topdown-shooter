@@ -100,6 +100,7 @@ margin_bottom = 64.0
 rect_min_size = Vector2( 200, 30 )
 custom_styles/fg = SubResource( 3 )
 custom_styles/bg = SubResource( 4 )
+max_value = 200.0
 value = 50.0
 
 [node name="HealthTween" type="Tween" parent="MarginContainer/Rows/BottomRow/ProgressBarSection/ProgressBars"]

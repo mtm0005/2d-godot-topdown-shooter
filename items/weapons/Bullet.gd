@@ -24,7 +24,6 @@ func _physics_process(delta: float) -> void:
 
 	# Destroy the bullet if needed
 	if position.distance_to(start_position) > bullet_range:
-		print("destroying bullet")
 		queue_free()
 
 

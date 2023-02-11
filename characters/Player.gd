@@ -3,14 +3,18 @@ class_name Player
 
 
 signal player_health_changed(new_health)
+signal player_stamina_changed(new_stamina)
 
 
 export (int) var walk_speed = 100
 export (int) var run_speed = 135
 export (int) var max_health = 100
+export (int) var max_stamina = 750
 
 
 var health: int = max_health
+var stamina: int = max_stamina
+var stamina_recovering: bool = false
 
 
 onready var camera = $Camera2D
@@ -29,12 +33,28 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_pressed("right"):
 		movement_direction.x += 1
 
-	var speed = run_speed if Input.is_action_pressed("sprint") else walk_speed
+	var speed = walk_speed
+	if Input.is_action_pressed("sprint") and stamina > 0:
+		stamina_recovering = false
+		speed = run_speed
+		set_stamina(stamina - 3)
+	elif stamina < max_stamina:
+		if not stamina_recovering:
+			$StaminaCooldownTimer.start()
+			stamina_recovering = true
+		elif $StaminaCooldownTimer.is_stopped():
+			set_stamina(stamina + 2)
 
 	movement_direction = movement_direction.normalized()
 	move_and_slide(movement_direction * speed)
 
 	look_at(get_global_mouse_position())
+
+
+func set_stamina(new_stamina):
+	if stamina != new_stamina:
+		stamina = clamp(new_stamina, 0, max_stamina)
+		emit_signal("player_stamina_changed", stamina)
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -44,13 +44,11 @@ func patrol():
 		actor.move_and_slide(actor.velocity_toward(patrol_location))
 		actor.rotate_toward(patrol_location)
 		if actor.has_reached_position(patrol_location):
-			print("patrol 1")
 			patrol_location_reached = true
 			$PatrolTimer.start()
 
 	# If the timer is stopped, set the new patrol location
 	elif $PatrolTimer.is_stopped():
-		print("patrol 2")
 		patrol_location = get_new_patrol_location()
 		patrol_location_reached = false
 
@@ -93,7 +91,6 @@ func set_state(new_state: int):
 
 
 func _on_DetectionZone_body_entered(body: Node) -> void:
-	print("body entered")
 	if current_state != State.ENGAGE and body.get_class() == "Player":
 		set_state(State.ENGAGE)
 		target = body
