@@ -24,6 +24,7 @@ func _ready():
 
 func attack():
 	if $ShotCooldown.is_stopped() and current_ammo > 0:
+		$GunAudio.play_gunshot()
 		$ShotCooldown.start()
 		var bullet_direction = gun_direction.global_position - end_of_gun.global_position
 		var bullet: Bullet = Bullet.instance()
@@ -49,3 +50,7 @@ func _stop_reload():
 func set_current_ammo(ammo: int):
 	current_ammo = clamp(ammo, 0, max_ammo)
 
+
+
+func _on_AudioStreamPlayer2D_finished() -> void:
+	print("audio finished playing")
