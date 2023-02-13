@@ -27,3 +27,9 @@ position = Vector2( 25, 11 )
 [node name="StaminaCooldownTimer" type="Timer" parent="."]
 wait_time = 1.5
 one_shot = true
+
+[node name="MovementAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+
+[node name="Timer" type="Timer" parent="MovementAudioPlayer"]
+wait_time = 0.5
+one_shot = true

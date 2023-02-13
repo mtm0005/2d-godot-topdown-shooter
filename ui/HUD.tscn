@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://assets/roboto_mono_36.tres" type="DynamicFont" id=1]
+[ext_resource path="res://assets/fonts/roboto_mono_36.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ui/HUD.gd" type="Script" id=2]
 
 [sub_resource type="StyleBoxFlat" id=1]

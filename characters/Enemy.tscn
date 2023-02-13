@@ -38,5 +38,11 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
+[node name="MovementAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+
+[node name="Timer" type="Timer" parent="MovementAudioPlayer"]
+wait_time = 0.5
+one_shot = true
+
 [connection signal="body_entered" from="AI/DetectionZone" to="AI" method="_on_DetectionZone_body_entered"]
 [connection signal="body_exited" from="AI/DetectionZone" to="AI" method="_on_DetectionZone_body_exited"]

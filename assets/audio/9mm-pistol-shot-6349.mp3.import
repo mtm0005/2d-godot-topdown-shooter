@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/9mm-pistol-shot-6349.mp3-ea3d805d29de877ad9e6242bcb49697c.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/9mm-pistol-shot-6349.mp3"
+dest_files=[ "res://.import/9mm-pistol-shot-6349.mp3-ea3d805d29de877ad9e6242bcb49697c.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -17,8 +17,16 @@ var stamina: int = max_stamina
 var stamina_recovering: bool = false
 
 
+var level_tilemap: TileMap = null
+var water_movement_sound = load("res://assets/audio/person-walking-in-water-47854.mp3")
+
+
 onready var camera = $Camera2D
 onready var weapon: Gun = $Gun;
+
+
+func initialize(tilemap: TileMap):
+	level_tilemap = tilemap
 
 
 func _physics_process(delta: float) -> void:
@@ -44,6 +52,13 @@ func _physics_process(delta: float) -> void:
 			stamina_recovering = true
 		elif $StaminaCooldownTimer.is_stopped():
 			set_stamina(stamina + 2)
+
+	# Move more slowly in water and play sound
+	if movement_direction != Vector2.ZERO and _in_water():
+		speed *= 0.75
+		_play_water_movement_audio()
+	elif $MovementAudioPlayer.is_playing():
+		_stop_water_movement_audio()
 
 	movement_direction = movement_direction.normalized()
 	move_and_slide(movement_direction * speed)
@@ -83,3 +98,25 @@ func handle_hit():
 		#queue_free()
 		print('player should die')
 		health = max_health
+
+
+func _in_water() -> bool:
+	var local_position = level_tilemap.to_local(global_position)
+	var map_position = level_tilemap.world_to_map(local_position)
+	var tile_id = level_tilemap.get_cell(map_position.x, map_position.y)
+	if level_tilemap.tile_set.tile_get_name(tile_id) == "water":
+		return true
+
+	return false
+
+
+func _play_water_movement_audio():
+	$MovementAudioPlayer/Timer.start()
+	if not $MovementAudioPlayer.is_playing():
+		$MovementAudioPlayer.stream = water_movement_sound
+		$MovementAudioPlayer.play(rand_range(0.0, $MovementAudioPlayer.stream.get_length()))
+
+
+func _stop_water_movement_audio():
+	if $MovementAudioPlayer/Timer.is_stopped():
+		$MovementAudioPlayer.stop()
