@@ -32,3 +32,7 @@ func play_gunshot():
 		gunshot_audio_players.append(AudioStreamPlayer2D.new())
 		setup_gunshot_audio_player(gunshot_audio_players[-1])
 		gunshot_audio_players[-1].play()
+
+
+func play_reload():
+	$ReloadAudioPlayer.play()

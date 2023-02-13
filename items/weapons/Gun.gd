@@ -32,24 +32,25 @@ func attack():
 		get_node("/root/main").add_child(bullet)
 		$AnimationPlayer.play("muzzle_flash")
 		set_current_ammo(current_ammo - 1)
-		emit_signal("gun_ammo_changed", current_ammo)
 		if current_ammo <= 0:
 			emit_signal("gun_out_of_ammo")
 
 
 func start_reload():
+	set_current_ammo(0)
 	$AnimationPlayer.play("reload")
+	$GunAudio.play_reload()
 
 
 # Called at the end of the reload animation
 func _stop_reload():
-	current_ammo = max_ammo
-	emit_signal("gun_ammo_changed", current_ammo)
+	set_current_ammo(max_ammo)
 
 
 func set_current_ammo(ammo: int):
-	current_ammo = clamp(ammo, 0, max_ammo)
-
+	if ammo != current_ammo:
+		current_ammo = clamp(ammo, 0, max_ammo)
+		emit_signal("gun_ammo_changed", current_ammo)
 
 
 func _on_AudioStreamPlayer2D_finished() -> void:

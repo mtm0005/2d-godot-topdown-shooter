@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/9mm-pistol-load-and-chamber-98830.mp3-ca0133bb8ba993973fe34aa5ac55f681.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/9mm-pistol-load-and-chamber-98830.mp3"
+dest_files=[ "res://.import/9mm-pistol-load-and-chamber-98830.mp3-ca0133bb8ba993973fe34aa5ac55f681.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
