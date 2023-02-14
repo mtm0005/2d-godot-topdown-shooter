@@ -19,6 +19,7 @@ var stamina_recovering: bool = false
 
 var level_tilemap: TileMap = null
 var water_movement_sound = load("res://assets/audio/person-walking-in-water-47854.mp3")
+var grass_movement_sound = load("res://assets/audio/running-in-grass-6237.mp3")
 
 
 onready var camera = $Camera2D
@@ -53,12 +54,12 @@ func _physics_process(delta: float) -> void:
 		elif $StaminaCooldownTimer.is_stopped():
 			set_stamina(stamina + 2)
 
-	# Move more slowly in water and play sound
-	if movement_direction != Vector2.ZERO and _in_water():
-		speed *= 0.75
-		_play_water_movement_audio()
+	if movement_direction != Vector2.ZERO:
+		_play_movement_audio()
+		if _in_water():
+			speed *= 0.75
 	elif $MovementAudioPlayer.is_playing():
-		_stop_water_movement_audio()
+		_stop_movement_audio()
 
 	movement_direction = movement_direction.normalized()
 	move_and_slide(movement_direction * speed)
@@ -110,13 +111,21 @@ func _in_water() -> bool:
 	return false
 
 
-func _play_water_movement_audio():
+func _play_movement_audio():
 	$MovementAudioPlayer/Timer.start()
-	if not $MovementAudioPlayer.is_playing():
-		$MovementAudioPlayer.stream = water_movement_sound
-		$MovementAudioPlayer.play(rand_range(0.0, $MovementAudioPlayer.stream.get_length()))
+	var audio_to_play = grass_movement_sound
+	if _in_water():
+		audio_to_play = water_movement_sound
+
+	_play_audio($MovementAudioPlayer, audio_to_play)
 
 
-func _stop_water_movement_audio():
+func _play_audio(audio_player: AudioStreamPlayer2D, audio: AudioStream):
+	if not audio_player.is_playing():
+		audio_player.stream = audio
+		audio_player.play(rand_range(0.0, audio_player.stream.get_length()))
+
+
+func _stop_movement_audio():
 	if $MovementAudioPlayer/Timer.is_stopped():
 		$MovementAudioPlayer.stop()
