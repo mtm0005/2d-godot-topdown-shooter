@@ -79,6 +79,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("reload"):
 		reload()
 
+	if event.is_action_pressed("print_info"):
+		print("----------------------------------------")
+		print("player info:")
+		print("	global position: %s" % global_position)
+		print("	global rotation degrees: %f" % global_rotation_degrees)
+		print("----------------------------------------")
+
 
 func get_class() -> String:
 	return "Player"

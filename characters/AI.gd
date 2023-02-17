@@ -3,7 +3,8 @@ extends Node2D
 
 enum State {
 	PATROL,
-	ENGAGE
+	ENGAGE,
+	FRENZY
 }
 
 
@@ -14,6 +15,10 @@ var patrol_location: Vector2 = Vector2.ZERO
 var patrol_location_reached: bool = false
 
 
+var frenzy_direction := 0.0
+var frenzy_position := Vector2.ZERO
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	randomize()
@@ -22,6 +27,7 @@ func _ready() -> void:
 func initialize(actor: Enemy):
 	self.actor = actor
 	set_state(State.PATROL)
+	actor.connect("hit", self, "_handle_hit")
 
 
 func get_new_patrol_location() -> Vector2:
@@ -63,6 +69,15 @@ func engage(delta):
 			$AttackTimer.start()
 
 
+func frenzy():
+	if actor.has_reached_position(frenzy_position):
+		set_state(State.PATROL)
+		$DetectionZone/CollisionShape2D.scale = Vector2(1, 1)
+	else:
+		actor.rotate_toward(frenzy_position)
+		actor.move_and_slide(actor.velocity_toward(frenzy_position)*1.25)
+
+
 func _physics_process(delta: float) -> void:
 	match current_state:
 		State.PATROL:
@@ -70,6 +85,9 @@ func _physics_process(delta: float) -> void:
 
 		State.ENGAGE:
 			engage(delta)
+
+		State.FRENZY:
+			frenzy()
 
 		_:
 			printerr("invalid enemy state (%d) in AI._process" % current_state)
@@ -104,3 +122,19 @@ func _on_DetectionZone_body_exited(body: Node) -> void:
 		set_state(State.PATROL)
 		target = null
 		$DetectionZone/CollisionShape2D.scale = Vector2(1, 1)
+
+
+func _handle_hit(bullet: Bullet):
+	if current_state == State.PATROL:
+		set_state(State.FRENZY)
+		$DetectionZone/CollisionShape2D.scale = Vector2(1.5, 1.5)
+
+		# Set the direction to the opposite of the bullet
+		frenzy_direction = bullet.global_rotation_degrees + 180
+
+		# Add a random value to the direction since the enemy isn't sure exactly
+		# where the shooter is.
+		var frenzy_offset = rand_range(-25, 25)
+		frenzy_direction += frenzy_offset
+		frenzy_position.y = global_position.y + 250 * sin(deg2rad(frenzy_direction))
+		frenzy_position.x = global_position.x + 250 * cos(deg2rad(frenzy_direction))
