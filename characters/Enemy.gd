@@ -3,6 +3,7 @@ class_name Enemy
 
 
 signal hit(bullet)
+signal died(enemy)
 
 
 export (int) var walk_speed = 50
@@ -31,8 +32,10 @@ func _physics_process(delta: float) -> void:
 			_stop_water_movement_audio()
 
 
-func initialize(tilemap: TileMap):
+func initialize(tilemap: TileMap, house: Area2D):
 	level_tilemap = tilemap
+	house.connect("enemy_hidden_in_house", self, "_hide")
+	house.connect("enemy_revealed", self, "_show")
 
 
 func rotate_toward(location: Vector2):
@@ -59,6 +62,7 @@ func handle_hit(bullet: Bullet):
 	emit_signal("hit", bullet)
 	health -= 20
 	if health <= 0:
+		emit_signal("died", self)
 		queue_free()
 
 
@@ -82,3 +86,13 @@ func _play_water_movement_audio():
 func _stop_water_movement_audio():
 	if $MovementAudioPlayer/Timer.is_stopped():
 		$MovementAudioPlayer.stop()
+
+
+func _hide(enemy):
+	if enemy == self:
+		self.hide()
+
+
+func _show(enemy):
+	if enemy == self:
+		self.show()
