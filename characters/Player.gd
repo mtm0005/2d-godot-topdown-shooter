@@ -99,7 +99,7 @@ func reload():
 	weapon.start_reload()
 
 
-func handle_hit():
+func handle_hit(_node):
 	health -= 20
 	emit_signal("player_health_changed", health)
 	if health <= 0:

@@ -65,7 +65,7 @@ func engage(delta):
 		actor.rotate_toward(target_position)
 		var body: KinematicCollision2D = actor.move_and_collide(actor.velocity_toward(target_position) * delta)
 		if body != null and body.collider.has_method("handle_hit"):
-			body.collider.handle_hit()
+			body.collider.handle_hit(self)
 			$AttackTimer.start()
 
 

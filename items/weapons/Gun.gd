@@ -28,8 +28,8 @@ func attack():
 		$ShotCooldown.start()
 		var bullet_direction = gun_direction.global_position - end_of_gun.global_position
 		var bullet: Bullet = Bullet.instance()
-		bullet.initialize(end_of_gun.global_position, bullet_direction.normalized())
 		get_node("/root/main").add_child(bullet)
+		bullet.initialize(end_of_gun.global_position, bullet_direction.normalized())
 		$AnimationPlayer.play("muzzle_flash")
 		set_current_ammo(current_ammo - 1)
 		if current_ammo <= 0:
