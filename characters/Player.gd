@@ -18,8 +18,8 @@ var stamina_recovering: bool = false
 
 
 var level_tilemap: TileMap = null
-var water_movement_sound = load("res://assets/audio/person-walking-in-water-47854.mp3")
-var grass_movement_sound = load("res://assets/audio/running-in-grass-6237.mp3")
+const WATER_MOVEMENT_SOUND = preload("res://assets/audio/person-walking-in-water-47854.mp3")
+const GRASS_MOVEMENT_SOUND = preload("res://assets/audio/running-in-grass-6237.mp3")
 
 
 onready var camera = $Camera2D
@@ -120,9 +120,9 @@ func _in_water() -> bool:
 
 func _play_movement_audio():
 	$MovementAudioPlayer/Timer.start()
-	var audio_to_play = grass_movement_sound
+	var audio_to_play = GRASS_MOVEMENT_SOUND
 	if _in_water():
-		audio_to_play = water_movement_sound
+		audio_to_play = WATER_MOVEMENT_SOUND
 
 	_play_audio($MovementAudioPlayer, audio_to_play)
 

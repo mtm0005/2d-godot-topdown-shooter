@@ -15,7 +15,7 @@ var health: int = max_health
 
 
 var level_tilemap: TileMap = null
-var water_movement_sound = load("res://assets/audio/person-walking-in-water-47854.mp3")
+const WATER_MOVEMENT_SOUND = preload("res://assets/audio/person-walking-in-water-47854.mp3")
 var previous_position := Vector2.ZERO
 
 
@@ -79,7 +79,7 @@ func _in_water() -> bool:
 func _play_water_movement_audio():
 	$MovementAudioPlayer/Timer.start()
 	if not $MovementAudioPlayer.is_playing():
-		$MovementAudioPlayer.stream = water_movement_sound
+		$MovementAudioPlayer.stream = WATER_MOVEMENT_SOUND
 		$MovementAudioPlayer.play(rand_range(0.0, $MovementAudioPlayer.stream.get_length()))
 
 

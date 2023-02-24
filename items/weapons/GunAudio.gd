@@ -2,7 +2,7 @@ extends Node2D
 
 
 var gunshot_audio_players = [AudioStreamPlayer2D.new(), AudioStreamPlayer2D.new()]
-var gunshot_sound = load("res://assets/audio/9mm-pistol-shot-6349.mp3")
+const GUNSHOT_SOUND = preload("res://assets/audio/9mm-pistol-shot-6349.mp3")
 
 
 func _ready() -> void:
@@ -11,7 +11,7 @@ func _ready() -> void:
 
 
 func setup_gunshot_audio_player(audio_player: AudioStreamPlayer2D) -> void:
-	audio_player.stream = gunshot_sound
+	audio_player.stream = GUNSHOT_SOUND
 	audio_player.volume_db = 1
 	audio_player.pitch_scale = 1
 	add_child(audio_player)
