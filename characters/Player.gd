@@ -102,6 +102,7 @@ func reload():
 func handle_hit(_node):
 	health -= 20
 	emit_signal("player_health_changed", health)
+	SpawnEffect.spawn_effect(SpawnEffect.Effects.BLOOD_SPRAY, global_position, _node.rotation)
 	if health <= 0:
 		#queue_free()
 		print('player should die')

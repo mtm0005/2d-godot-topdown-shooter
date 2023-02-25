@@ -59,6 +59,10 @@ _global_script_class_icons={
 config/name="Topdown Showdown"
 run/main_scene="res://main.tscn"
 
+[autoload]
+
+SpawnEffect="*res://scripts/SpawnEffect.gd"
+
 [editor]
 
 version_control_autoload_on_startup=true

@@ -61,6 +61,7 @@ func has_reached_position(location: Vector2) -> bool:
 func handle_hit(bullet: Bullet):
 	emit_signal("hit", bullet)
 	health -= 20
+	SpawnEffect.spawn_effect(SpawnEffect.Effects.BLOOD_SPRAY, global_position, bullet.direction.angle())
 	if health <= 0:
 		emit_signal("died", self)
 		queue_free()
