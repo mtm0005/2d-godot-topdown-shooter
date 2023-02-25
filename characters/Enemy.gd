@@ -97,3 +97,9 @@ func _hide(enemy):
 func _show(enemy):
 	if enemy == self:
 		self.show()
+
+
+func _on_AI_state_changed(previous_state, current_state) -> void:
+	# engage or frenzy
+	if current_state == 1 or current_state == 2 and not $GrowlAudioPlayer.is_playing():
+		$GrowlAudioPlayer.play()

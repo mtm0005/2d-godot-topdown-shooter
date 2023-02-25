@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/topdown-shooter/PNG/Robot 1/robot1_hold.png" type="Texture" id=1]
 [ext_resource path="res://characters/AI.gd" type="Script" id=2]
 [ext_resource path="res://characters/Enemy.gd" type="Script" id=3]
+[ext_resource path="res://assets/audio/growling-zombie-104988.mp3" type="AudioStream" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16.25, 21.5 )
@@ -44,5 +45,9 @@ one_shot = true
 wait_time = 0.5
 one_shot = true
 
+[node name="GrowlAudioPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+
+[connection signal="state_changed" from="AI" to="." method="_on_AI_state_changed"]
 [connection signal="body_entered" from="AI/DetectionZone" to="AI" method="_on_DetectionZone_body_entered"]
 [connection signal="body_exited" from="AI/DetectionZone" to="AI" method="_on_DetectionZone_body_exited"]

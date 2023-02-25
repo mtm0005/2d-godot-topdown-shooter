@@ -1,6 +1,9 @@
 extends Node2D
 
 
+signal state_changed(previous_state, current_state)
+
+
 enum State {
 	PATROL,
 	ENGAGE,
@@ -64,7 +67,7 @@ func engage(delta):
 		var target_position = target.global_position
 		actor.rotate_toward(target_position)
 		var body: KinematicCollision2D = actor.move_and_collide(actor.velocity_toward(target_position) * delta)
-		if body != null and body.collider.has_method("handle_hit"):
+		if body != null and body.collider.has_method("get_class") and body.collider.get_class() == "Player":
 			body.collider.handle_hit(self)
 			$AttackTimer.start()
 
@@ -97,6 +100,8 @@ func set_state(new_state: int):
 	if new_state == current_state:
 		return
 
+	emit_signal("state_changed", current_state, new_state)
+	print("state changed from %d to %d" % [current_state, new_state])
 	current_state = new_state
 	if current_state == State.PATROL:
 		$PatrolTimer.start()
@@ -104,8 +109,6 @@ func set_state(new_state: int):
 
 	else:
 		$PatrolTimer.stop()
-
-	print("state changed to %d" % current_state)
 
 
 func _on_DetectionZone_body_entered(body: Node) -> void:
@@ -115,6 +118,7 @@ func _on_DetectionZone_body_entered(body: Node) -> void:
 
 		# make the detection zone larger while engaging an enemy
 		$DetectionZone/CollisionShape2D.scale = Vector2(1.5, 1.5)
+
 
 
 func _on_DetectionZone_body_exited(body: Node) -> void:
