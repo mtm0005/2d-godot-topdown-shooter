@@ -3,7 +3,7 @@ class_name Enemy
 
 
 signal hit(bullet)
-signal died(enemy)
+signal removed_from_scene(enemy)
 
 
 export (int) var walk_speed = 50
@@ -32,10 +32,8 @@ func _physics_process(delta: float) -> void:
 			_stop_water_movement_audio()
 
 
-func initialize(tilemap: TileMap, house: Area2D):
+func initialize(tilemap: TileMap):
 	level_tilemap = tilemap
-	house.connect("enemy_hidden_in_house", self, "_hide")
-	house.connect("enemy_revealed", self, "_show")
 
 
 func rotate_toward(location: Vector2):
@@ -61,9 +59,11 @@ func has_reached_position(location: Vector2) -> bool:
 func handle_hit(bullet: Bullet):
 	emit_signal("hit", bullet)
 	health -= 20
-	SpawnEffect.spawn_effect(SpawnEffect.Effects.BLOOD_SPRAY, global_position, bullet.direction.angle())
+	if visible:
+		SpawnEffect.spawn_effect(SpawnEffect.Effects.BLOOD_SPRAY, global_position, bullet.direction.angle())
 	if health <= 0:
-		emit_signal("died", self)
+		emit_signal("removed_from_scene", self)
+		print("enemy died")
 		queue_free()
 
 
@@ -89,17 +89,11 @@ func _stop_water_movement_audio():
 		$MovementAudioPlayer.stop()
 
 
-func _hide(enemy):
-	if enemy == self:
-		self.hide()
-
-
-func _show(enemy):
-	if enemy == self:
-		self.show()
-
-
 func _on_AI_state_changed(previous_state, current_state) -> void:
 	# engage or frenzy
 	if current_state == 1 or current_state == 2 and not $GrowlAudioPlayer.is_playing():
 		$GrowlAudioPlayer.play()
+
+
+func get_class() -> String:
+	return "Enemy"

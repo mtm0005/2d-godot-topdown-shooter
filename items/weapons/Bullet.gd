@@ -2,6 +2,9 @@ extends Area2D
 class_name Bullet
 
 
+signal removed_from_scene(bullet)
+
+
 export (int) var speed = 10
 export (float) var bullet_range = 600.0
 
@@ -32,3 +35,7 @@ func _on_Bullet_body_entered(body: Node) -> void:
 		body.handle_hit(self)
 
 	queue_free()
+
+
+func get_class() -> String:
+	return "Bullet"
